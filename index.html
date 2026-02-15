@@ -18,80 +18,83 @@
             text-align: center;
         }
 
-        /* TÍTULO ARRIBA */
-        .titulo {
+        /* CAPA DE LA FOTO (AL FONDO) */
+        .foto-capa {
             position: absolute;
-            top: 20px;
-            font-size: 28px;
-            color: #1a5e37;
-            z-index: 100;
-            text-shadow: 2px 2px white;
-            width: 100%;
+            z-index: 1; /* Nivel bajo */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: flotarFoto 6s infinite ease-in-out;
         }
 
-        /* CAPA DE LA FOTO (ATRÁS) */
-        .foto-container {
-            position: relative;
-            z-index: 1; /* Fondo */
-            animation: flotar 5s infinite ease-in-out;
-        }
-
-        @keyframes flotar {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        @keyframes flotarFoto {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-30px) scale(1.05); }
         }
 
         .main-photo {
-            width: 200px;
-            height: 200px;
+            width: 190px;
+            height: 190px;
             border-radius: 50%;
             border: 6px solid #ffffff;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             object-fit: cover;
         }
 
-        .mensaje-box {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 15px;
+        .mensaje {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px 20px;
             border-radius: 20px;
             margin-top: 15px;
             border: 2px solid #27ae60;
+            color: #1a5e37;
         }
 
         /* CAPA DE PALABRAS (ADELANTE DE TODO) */
-        .palabras-layer {
+        .palabras-capa {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 999; /* Por encima de la foto */
-            pointer-events: none;
+            z-index: 999; /* Nivel altísimo para que pase por ARRIBA */
+            pointer-events: none; /* Para poder tocar el botón que está atrás */
         }
 
-        .palabra-flotante {
+        .palabra {
             position: absolute;
-            padding: 10px 15px;
+            padding: 10px 18px;
             border-radius: 30px;
             color: white;
             font-weight: bold;
-            font-size: 15px;
+            font-size: 16px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             white-space: nowrap;
             animation: moverPalabra linear infinite;
         }
 
         @keyframes moverPalabra {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(15vw, 15vh); }
-            50% { transform: translate(-10vw, 30vh); }
-            75% { transform: translate(-20vw, 10vh); }
-            100% { transform: translate(0, 0); }
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(25vw, 20vh) rotate(5deg); }
+            50% { transform: translate(-15vw, 40vh) rotate(-5deg); }
+            75% { transform: translate(-30vw, 15vh) rotate(3deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        .titulo {
+            position: absolute;
+            top: 20px;
+            font-size: 30px;
+            color: #1a5e37;
+            z-index: 1000;
+            text-shadow: 2px 2px white;
         }
 
         .btn-musica {
             position: absolute;
-            bottom: 30px;
+            bottom: 40px;
+            z-index: 1001;
             background: #1a5e37;
             color: white;
             border: 2px solid white;
@@ -99,7 +102,6 @@
             border-radius: 50px;
             font-weight: bold;
             cursor: pointer;
-            z-index: 1000;
         }
     </style>
 </head>
@@ -107,51 +109,56 @@
 
     <div class="titulo">Corsos Color 2026</div>
 
-    <div class="palabras-layer" id="contenedor"></div>
+    <div class="palabras-capa" id="contenedorPalabras"></div>
 
-    <div class="foto-container">
-        <img src="foto.jpg" class="main-photo" onerror="this.src='https://via.placeholder.com/200?text=Sube+tu+foto.jpg'">
-        <div class="mensaje-box">
-            <h2 style="margin:0; color:#27ae60;">¡Energía Verde! 💚</h2>
-            <p style="margin:5px 0 0;">El ritmo de la cumbia me lleva</p>
+    <div class="foto-capa">
+        <img src="foto.jpg" class="main-photo">
+        <div class="mensaje">
+            <h2 style="margin:0; font-size:20px;">¡Energía Verde! 💚</h2>
+            <p style="margin:5px 0 0; font-weight:bold;">El ritmo de la cumbia me lleva</p>
         </div>
-        <div style="color:white; font-size:22px; text-shadow:2px 2px #1a5e37; margin-top:10px; font-weight:bold;">
+        <div style="color:#ffffff; font-size:24px; font-weight:bold; text-shadow:2px 2px #1a5e37; margin-top:10px;">
             Caballero de la Cumbia 🎶
         </div>
     </div>
 
-    <button class="btn-musica" onclick="playMusic()">🎵 ¡QUE SUENE LA CUMBIA!</button>
+    <button id="playBtn" class="btn-musica" onclick="tocarMusica()">🎵 ¡DALE PLAY A LA CUMBIA!</button>
     
-    <audio id="track" src="musica.mp3"></audio>
+    <audio id="musica" src="musica.mp3"></audio>
 
     <script>
-        const datos = [
+        const lista = [
             {t: 'Pasión 🧡', c: '#e74c3c'}, {t: 'Bailarina ✨', c: '#f1c40f'},
-            {t: 'Ritmo 🌈', c: '#9b59b6'}, {t: 'Corso 2026 🎊', c: '#e67e22'},
+            {t: 'Ritmo y Color 🌈', c: '#9b59b6'}, {t: 'Corso 2026 🎊', c: '#e67e22'},
             {t: 'Alegría 🎉', c: '#1abc9c'}, {t: 'Danza 💃', c: '#ff5722'},
-            {t: '¡Esooooo! 🔥', c: '#d35400'}, {t: '¡Diosa! 👑', c: '#e91e63'},
-            {t: '¡Sabor! 🎤', c: '#f39c12'}, {t: '¡Qué ritmo! 🥁', c: '#c0392b'},
-            {t: '¡Aplausos! 👏', c: '#2980b9'}, {t: '¡A brillar! 🌟', c: '#f1c40f'}
+            {t: '¡Esooooo! 🔥', c: '#d35400'}, {t: '¡Qué elegancia! 💅', c: '#e91e63'},
+            {t: '¡Pura Vida! 🌿', c: '#2ecc71'}, {t: '¡Sabor! 🎤', c: '#f39c12'},
+            {t: '¡Diosa! 👑', c: '#8e44ad'}, {t: '¡A brillar! 🌟', c: '#f1c40f'},
+            {t: '¡Magia pura! ✨', c: '#3498db'}, {t: '¡Qué ritmo! 🥁', c: '#c0392b'},
+            {t: '¡Orán de fiesta! 🎭', c: '#16a085'}, {t: '¡Aplausos! 👏', c: '#2980b9'}
         ];
 
-        const layer = document.getElementById('contenedor');
-        datos.forEach((d, i) => {
-            const s = document.createElement('div');
-            s.className = 'palabra-flotante';
-            s.innerText = d.t;
-            s.style.background = d.c;
-            s.style.top = (Math.random() * 80 + 10) + '%';
-            s.style.left = (Math.random() * 80 + 5) + '%';
-            s.style.animationDuration = (Math.random() * 5 + 8) + 's';
-            s.style.animationDelay = (i * 0.4) + 's';
-            layer.appendChild(s);
+        const capa = document.getElementById('contenedorPalabras');
+
+        lista.forEach((p, i) => {
+            const el = document.createElement('div');
+            el.className = 'palabra';
+            el.innerText = p.t;
+            el.style.backgroundColor = p.c;
+            el.style.top = Math.random() * 80 + '%';
+            el.style.left = Math.random() * 80 + '%';
+            el.style.animationDuration = (Math.random() * 6 + 10) + 's';
+            el.style.animationDelay = (i * 0.3) + 's';
+            capa.appendChild(el);
         });
 
-        function playMusic() {
-            const a = document.getElementById("track");
-            a.currentTime = 20;
-            a.play();
-            document.querySelector('.btn-musica').innerText = "🕺 ¡A BAILAR! 💃";
+        function tocarMusica() {
+            const m = document.getElementById("musica");
+            const b = document.getElementById("playBtn");
+            m.currentTime = 20; 
+            m.play();
+            b.innerText = "🕺 ¡A BAILAR! 💃";
+            b.style.background = "#2ecc71";
         }
     </script>
 </body>
