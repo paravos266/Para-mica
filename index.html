@@ -20,93 +20,91 @@
 
         .header-title {
             position: absolute;
-            top: 25px;
-            font-size: 32px;
+            top: 20px;
+            font-size: 28px;
             color: #1a5e37;
             text-transform: uppercase;
-            z-index: 100;
+            z-index: 100; /* Siempre arriba */
             text-shadow: 2px 2px 0px white;
         }
 
-        /* Las palabras ahora se mueven por toda la pantalla */
+        /* CAPA DE LA FOTO: Ahora está al fondo (z-index: 1) */
+        .main-content {
+            position: relative;
+            z-index: 1; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: mainFloat 5s infinite ease-in-out;
+        }
+
+        @keyframes mainFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-25px) rotate(2deg); }
+        }
+
+        .main-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 6px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            object-fit: cover;
+        }
+
+        .message-container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin-top: 15px;
+            border: 2px solid #27ae60;
+        }
+
+        /* CAPA DE PALABRAS: Ahora pasan POR DELANTE (z-index: 50) */
         .floating-word {
             position: absolute;
-            padding: 10px 18px;
-            border-radius: 30px;
+            padding: 6px 12px;
+            border-radius: 20px;
             color: white;
             font-weight: bold;
-            font-size: 16px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-size: 13px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             white-space: nowrap;
-            z-index: 10;
+            z-index: 50; 
+            pointer-events: none; /* Para que no bloqueen los clics al botón */
             animation: moveAround linear infinite;
         }
 
         @keyframes moveAround {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(10vw, 10vh) rotate(5deg); }
-            50% { transform: translate(-5vw, 20vh) rotate(-5deg); }
-            75% { transform: translate(-15vw, 5vh) rotate(3deg); }
-            100% { transform: translate(0, 0) rotate(0deg); }
-        }
-
-        .main-photo {
-            width: 170px;
-            height: 170px;
-            border-radius: 50%;
-            border: 6px solid #ffffff;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
-            object-fit: cover;
-            z-index: 50;
-            animation: pulse 2s infinite ease-in-out;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-        }
-
-        .message-container {
-            z-index: 50;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px 25px;
-            border-radius: 20px;
-            margin: 15px 0;
-            border: 3px solid #27ae60;
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(20vw, 20vh); }
+            50% { transform: translate(-10vw, 40vh); }
+            75% { transform: translate(-25vw, 15vh); }
+            100% { transform: translate(0, 0); }
         }
 
         .footer-text {
-            font-size: 26px;
+            position: absolute;
+            bottom: 100px;
+            font-size: 24px;
             color: #ffffff;
             font-weight: bold;
-            z-index: 50;
             text-shadow: 2px 2px 4px #1a5e37;
+            z-index: 100;
         }
 
         .music-btn {
+            position: absolute;
+            bottom: 30px;
             background: #1a5e37;
             color: white;
             border: 2px solid white;
-            padding: 15px 35px;
+            padding: 12px 30px;
             border-radius: 50px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            z-index: 100;
-            margin-top: 20px;
-        }
-
-        /* Lluvia de antifaces */
-        .corso-item {
-            position: absolute;
-            font-size: 24px;
-            animation: fall linear infinite;
-            z-index: 1;
-        }
-
-        @keyframes fall {
-            from { transform: translateY(-10vh); }
-            to { transform: translateY(110vh); }
+            z-index: 110;
         }
     </style>
 </head>
@@ -114,14 +112,15 @@
 
     <div class="header-title">Corsos Color 2026</div>
 
-    <img src="foto.jpg" class="main-photo">
-
-    <div class="message-container">
-        <h1>¡Energía Verde! 💚✨</h1>
-        <p>El ritmo de la cumbia me lleva</p>
-    </div>
-
     <div id="wordsContainer"></div>
+
+    <div class="main-content">
+        <img src="foto.jpg" class="main-photo">
+        <div class="message-container">
+            <h1>¡Energía Verde! 💚✨</h1>
+            <p>El ritmo de la cumbia me lleva</p>
+        </div>
+    </div>
 
     <div class="footer-text">Caballero de la Cumbia 🎶</div>
 
@@ -133,33 +132,27 @@
 
     <script>
         const palabras = [
-            {t: 'Pasión 🧡', c: '#e74c3c'},
-            {t: 'Bailarina ✨', c: '#f1c40f'},
-            {t: 'Ritmo y Color 🌈', c: '#9b59b6'},
-            {t: 'Noche Mágica 🌙', c: '#3498db'},
-            {t: 'Corso 2026 🎊', c: '#e67e22'},
-            {t: 'Alegría 🎉', c: '#1abc9c'},
-            {t: 'Brillo 💎', c: '#e91e63'},
-            {t: 'Danza 💃', c: '#ff5722'}
+            {t: 'Pasión 🧡', c: '#e74c3c'}, {t: 'Bailarina ✨', c: '#f1c40f'},
+            {t: 'Ritmo y Color 🌈', c: '#9b59b6'}, {t: 'Corso 2026 🎊', c: '#e67e22'},
+            {t: 'Alegría 🎉', c: '#1abc9c'}, {t: 'Danza 💃', c: '#ff5722'},
+            {t: '¡Esooooo! 🔥', c: '#d35400'}, {t: '¡Qué elegancia! 💅', c: '#e91e63'},
+            {t: '¡Pura Vida! 🌿', c: '#2ecc71'}, {t: '¡Sabor! 🎤', c: '#f39c12'},
+            {t: '¡Diosa! 👑', c: '#8e44ad'}, {t: '¡A brillar! 🌟', c: '#f1c40f'},
+            {t: '¡Magia pura! ✨', c: '#3498db'}, {t: '¡Qué ritmo! 🥁', c: '#c0392b'},
+            {t: '¡Orán de fiesta! 🎭', c: '#16a085'}, {t: '¡Aplausos! 👏', c: '#2980b9'}
         ];
 
         const container = document.getElementById('wordsContainer');
 
-        // Crear las palabras flotantes
         palabras.forEach((p, index) => {
             const span = document.createElement('span');
             span.className = 'floating-word';
             span.innerText = p.t;
             span.style.background = p.c;
-            
-            // Posiciones iniciales aleatorias
-            span.style.top = Math.random() * 60 + 20 + 'vh';
-            span.style.left = Math.random() * 70 + 5 + 'vw';
-            
-            // Velocidades y retrasos aleatorios para que no se muevan igual
-            span.style.animationDuration = (Math.random() * 4 + 6) + 's';
-            span.style.animationDelay = (index * 0.5) + 's';
-            
+            span.style.top = Math.random() * 70 + 10 + 'vh';
+            span.style.left = Math.random() * 70 + 10 + 'vw';
+            span.style.animationDuration = (Math.random() * 5 + 10) + 's';
+            span.style.animationDelay = (index * 0.4) + 's';
             container.appendChild(span);
         });
 
@@ -172,18 +165,6 @@
                 btn.style.background = "#2ecc71";
             });
         }
-
-        function createCorsoEffect() {
-            const items = ['🎭', '✨', '💚', '🎉'];
-            const div = document.createElement('div');
-            div.className = 'corso-item';
-            div.innerText = items[Math.floor(Math.random() * items.length)];
-            div.style.left = Math.random() * 100 + 'vw';
-            div.style.animationDuration = Math.random() * 3 + 2 + 's';
-            document.body.appendChild(div);
-            setTimeout(() => div.remove(), 5000);
-        }
-        setInterval(createCorsoEffect, 400);
     </script>
 </body>
 </html>
