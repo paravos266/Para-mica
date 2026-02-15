@@ -18,120 +18,116 @@
             text-align: center;
         }
 
-        .header-title {
+        /* CAPA DE LA FOTO (AL FONDO) */
+        .foto-capa {
             position: absolute;
-            top: 20px;
-            font-size: 28px;
-            color: #1a5e37;
-            text-transform: uppercase;
-            z-index: 100; /* Siempre arriba */
-            text-shadow: 2px 2px 0px white;
-        }
-
-        /* CAPA DE LA FOTO: Ahora está al fondo (z-index: 1) */
-        .main-content {
-            position: relative;
-            z-index: 1; 
+            z-index: 1; /* Nivel bajo */
             display: flex;
             flex-direction: column;
             align-items: center;
-            animation: mainFloat 5s infinite ease-in-out;
+            animation: flotarFoto 6s infinite ease-in-out;
         }
 
-        @keyframes mainFloat {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-25px) rotate(2deg); }
+        @keyframes flotarFoto {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-30px) scale(1.05); }
         }
 
         .main-photo {
-            width: 180px;
-            height: 180px;
+            width: 190px;
+            height: 190px;
             border-radius: 50%;
             border: 6px solid #ffffff;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             object-fit: cover;
         }
 
-        .message-container {
-            background: rgba(255, 255, 255, 0.8);
+        .mensaje {
+            background: rgba(255, 255, 255, 0.7);
             padding: 10px 20px;
             border-radius: 20px;
             margin-top: 15px;
             border: 2px solid #27ae60;
+            color: #1a5e37;
         }
 
-        /* CAPA DE PALABRAS: Ahora pasan POR DELANTE (z-index: 50) */
-        .floating-word {
+        /* CAPA DE PALABRAS (ADELANTE DE TODO) */
+        .palabras-capa {
             position: absolute;
-            padding: 6px 12px;
-            border-radius: 20px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999; /* Nivel altísimo para que pase por ARRIBA */
+            pointer-events: none; /* Para poder tocar el botón que está atrás */
+        }
+
+        .palabra {
+            position: absolute;
+            padding: 10px 18px;
+            border-radius: 30px;
             color: white;
             font-weight: bold;
-            font-size: 13px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-size: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             white-space: nowrap;
-            z-index: 50; 
-            pointer-events: none; /* Para que no bloqueen los clics al botón */
-            animation: moveAround linear infinite;
+            animation: moverPalabra linear infinite;
         }
 
-        @keyframes moveAround {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(20vw, 20vh); }
-            50% { transform: translate(-10vw, 40vh); }
-            75% { transform: translate(-25vw, 15vh); }
-            100% { transform: translate(0, 0); }
+        @keyframes moverPalabra {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(25vw, 20vh) rotate(5deg); }
+            50% { transform: translate(-15vw, 40vh) rotate(-5deg); }
+            75% { transform: translate(-30vw, 15vh) rotate(3deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
         }
 
-        .footer-text {
+        .titulo {
             position: absolute;
-            bottom: 100px;
-            font-size: 24px;
-            color: #ffffff;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px #1a5e37;
-            z-index: 100;
+            top: 20px;
+            font-size: 30px;
+            color: #1a5e37;
+            z-index: 1000;
+            text-shadow: 2px 2px white;
         }
 
-        .music-btn {
+        .btn-musica {
             position: absolute;
-            bottom: 30px;
+            bottom: 40px;
+            z-index: 1001;
             background: #1a5e37;
             color: white;
             border: 2px solid white;
-            padding: 12px 30px;
+            padding: 15px 30px;
             border-radius: 50px;
-            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            z-index: 110;
         }
     </style>
 </head>
 <body>
 
-    <div class="header-title">Corsos Color 2026</div>
+    <div class="titulo">Corsos Color 2026</div>
 
-    <div id="wordsContainer"></div>
+    <div class="palabras-capa" id="contenedorPalabras"></div>
 
-    <div class="main-content">
+    <div class="foto-capa">
         <img src="foto.jpg" class="main-photo">
-        <div class="message-container">
-            <h1>¡Energía Verde! 💚✨</h1>
-            <p>El ritmo de la cumbia me lleva</p>
+        <div class="mensaje">
+            <h2 style="margin:0; font-size:20px;">¡Energía Verde! 💚</h2>
+            <p style="margin:5px 0 0; font-weight:bold;">El ritmo de la cumbia me lleva</p>
+        </div>
+        <div style="color:#ffffff; font-size:24px; font-weight:bold; text-shadow:2px 2px #1a5e37; margin-top:10px;">
+            Caballero de la Cumbia 🎶
         </div>
     </div>
 
-    <div class="footer-text">Caballero de la Cumbia 🎶</div>
-
-    <button id="playBtn" class="music-btn" onclick="tocarMusica()">🎵 ¡QUE SUENE LA CUMBIA!</button>
+    <button id="playBtn" class="btn-musica" onclick="tocarMusica()">🎵 ¡DALE PLAY A LA CUMBIA!</button>
     
-    <audio id="bgMusic" preload="auto">
-        <source src="musica.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="musica" src="musica.mp3"></audio>
 
     <script>
-        const palabras = [
+        const lista = [
             {t: 'Pasión 🧡', c: '#e74c3c'}, {t: 'Bailarina ✨', c: '#f1c40f'},
             {t: 'Ritmo y Color 🌈', c: '#9b59b6'}, {t: 'Corso 2026 🎊', c: '#e67e22'},
             {t: 'Alegría 🎉', c: '#1abc9c'}, {t: 'Danza 💃', c: '#ff5722'},
@@ -142,29 +138,13 @@
             {t: '¡Orán de fiesta! 🎭', c: '#16a085'}, {t: '¡Aplausos! 👏', c: '#2980b9'}
         ];
 
-        const container = document.getElementById('wordsContainer');
+        const capa = document.getElementById('contenedorPalabras');
 
-        palabras.forEach((p, index) => {
-            const span = document.createElement('span');
-            span.className = 'floating-word';
-            span.innerText = p.t;
-            span.style.background = p.c;
-            span.style.top = Math.random() * 70 + 10 + 'vh';
-            span.style.left = Math.random() * 70 + 10 + 'vw';
-            span.style.animationDuration = (Math.random() * 5 + 10) + 's';
-            span.style.animationDelay = (index * 0.4) + 's';
-            container.appendChild(span);
-        });
-
-        function tocarMusica() {
-            var audio = document.getElementById("bgMusic");
-            var btn = document.getElementById("playBtn");
-            audio.currentTime = 20; 
-            audio.play().then(() => {
-                btn.innerHTML = "🕺 ¡A BAILAR! 💃";
-                btn.style.background = "#2ecc71";
-            });
-        }
-    </script>
-</body>
-</html>
+        lista.forEach((p, i) => {
+            const el = document.createElement('div');
+            el.className = 'palabra';
+            el.innerText = p.t;
+            el.style.backgroundColor = p.c;
+            el.style.top = Math.random() * 80 + '%';
+            el.style.left = Math.random() * 80 + '%';
+            el.
