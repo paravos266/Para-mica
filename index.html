@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corsos Color 2026 🎭</title>
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(180deg, #ffffff 0%, #2ecc71 100%);
+            overflow: hidden;
+            font-family: 'Arial Black', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .header-title {
+            position: absolute;
+            top: 25px;
+            font-size: 32px;
+            color: #1a5e37;
+            text-transform: uppercase;
+            z-index: 30;
+            text-shadow: 2px 2px 0px white;
+        }
+
+        .corso-item {
+            position: absolute;
+            font-size: 24px;
+            animation: fall linear infinite;
+            z-index: 1;
+            user-select: none;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        .main-photo {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            border: 6px solid #ffffff;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+            object-fit: cover;
+            z-index: 20;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .message-container {
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 3px solid #27ae60;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 { margin: 0; font-size: 24px; color: #27ae60; }
+        p { margin: 5px 0 0; color: #1a5e37; font-weight: bold; }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            max-width: 90%;
+            z-index: 20;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            padding: 10px 15px;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            animation: float 3s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .footer-text {
+            font-size: 26px;
+            color: #ffffff;
+            font-weight: bold;
+            z-index: 20;
+            text-shadow: 2px 2px 4px #1a5e37;
+            margin-top: 10px;
+        }
+
+        .music-btn {
+            background: #1a5e37;
+            color: white;
+            border: 2px solid white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 30;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-title">Corsos Color 2026</div>
+
+    <img src="foto.jpg" class="main-photo">
+
+    <div class="message-container">
+        <h1>¡Energía Verde! 💚✨</h1>
+        <p>El ritmo de la cumbia me lleva</p>
+    </div>
+
+    <div class="tags-container">
+        <span class="tag" style="background: #e74c3c; animation-delay: 0s;">Pasión 🧡</span>
+        <span class="tag" style="background: #f1c40f; animation-delay: 0.2s;">Bailarina ✨</span>
+        <span class="tag" style="background: #9b59b6; animation-delay: 0.4s;">Ritmo y Color 🌈</span>
+        <span class="tag" style="background: #3498db; animation-delay: 0.6s;">Noche Mágica 🌙</span>
+        <span class="tag" style="background: #e67e22; animation-delay: 0.8s;">Corso 2026 🎊</span>
+        <span class="tag" style="background: #1abc9c; animation-delay: 1s;">Alegría 🎉</span>
+        <span class="tag" style="background: #e91e63; animation-delay: 1.2s;">Brillo 💎</span>
+        <span class="tag" style="background: #ff5722; animation-delay: 1.4s;">Danza 💃</span>
+    </div>
+
+    <div class="footer-text">Caballero de la Cumbia 🎶</div>
+
+    <button id="playBtn" class="music-btn" onclick="tocarMusica()">🎵 ¡QUE SUENE LA CUMBIA!</button>
+    
+    <audio id="bgMusic" preload="auto">
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        function tocarMusica() {
+            var audio = document.getElementById("bgMusic");
+            var btn = document.getElementById("playBtn");
+            
+            // ESTO HACE QUE SALTE A LOS 20 SEGUNDOS
+            audio.currentTime = 20; 
+            
+            audio.play().then(function() {
+                btn.innerHTML = "🕺 ¡A BAILAR! 💃";
+                btn.style.background = "#2ecc71";
+            }).catch(function(error) {
+                console.log("Error al reproducir");
+            });
+        }
+
+        function createCorsoEffect() {
+            const items = ['🎭', '✨', '💚', '🎉', '🌟'];
+            const div = document.createElement('div');
+            div.className = 'corso-item';
+            div.innerText = items[Math.floor(Math.random() * items.length)];
+            div.style.left = Math.random() * 100 + 'vw';
+            div.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 5000);
+        }
+        setInterval(createCorsoEffect, 400);
+    </script>
+</body>
+</html>
